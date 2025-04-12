@@ -1,0 +1,12 @@
+name: RestCooldownNeo
+version: '1.0'
+main: ru.refontstudio.restcooldownneo.RestCooldownNeo
+api-version: '1.16'
+softdepend: [RestDuels, WorldGuard] # Изменено с depend на softdepend
+commands:
+  neocommand_cancel:
+    description: Отменяет телепортацию
+    usage: /<command>
+  neocommands:
+    description: Команды для управления плагином
+    usage: /<command> [info|reload|newcommand]

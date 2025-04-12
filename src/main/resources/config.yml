@@ -1,0 +1,149 @@
+# Made by NeoDev - https://dsc.gg/neodevds
+
+# Группы команд
+
+command-groups:
+  default: # Обычная группа команд
+    bossbar:
+      enable: true # Вкл | Выкл Боссбар
+      color: RED # Цвет боссбара
+      style: SOLID # Стиль боссбара
+    title:
+      enable: false # Вкл | Выкл Боссбар
+      title-text: "&cТелепортированы" # Текст в title
+      subtitle-text: "&fУспешная телепортация" # Текст в sub-title
+    cooldown: # Кулдаун для телепортаций
+      1:
+        permission: cooldown.defaulttp # Пермишен для кулдауна
+        cooldown: 6 # Время кулдауна (в секундах)
+      2:
+        permission: cooldown.elitetp
+        cooldown: 3
+      3:
+        permission: cooldown.adminsepta
+        cooldown: 1
+    sound-enable: true # Вкл | Выкл Звук при телепортации
+    sound: ENTITY_CREEPER_DEATH # Звук при телепортации
+    effects-enable: true # Вкл | Выкл Эффекты при телепортации
+    effects: # Эффекты при телепортации
+      - "BLINDNESS:1" # Сначала идёт сам эффект, затем время на сколько он выдаётся (в секундах)
+    commands-args: 0 # Пример - /spawn
+    commands-cooldown: # Команды для которых применяются настройки из этой группы
+      - spawn
+      - home
+      - rtp
+      - homes
+      - warp
+      - SPAWN
+      - WARP
+      - HOME
+      - RTP
+      - Rtp
+      - rTp
+      - rtP
+      - RtP
+      - RTp
+      - Home
+      - HOme
+      - HOMe
+      - hOME
+      - hoME
+      - homE
+      - Warp
+      - WArp
+      - WARp
+      - wARP
+      - waRP
+      - warP
+      - Spawn
+      - SPawn
+      - SPAwn
+      - SPAWn
+      - sPAWN
+      - spAWN
+      - spaWN
+      - spawN
+
+  special: # Группа команд для нескольких аргументов, пример (/warp [arg])
+    bossbar:
+      enable: true # Вкл | Выкл Боссбар
+      color: RED # Цвет боссбара
+      style: SOLID # Стиль боссбара
+    title:
+      enable: false # Вкл | Выкл Боссбар
+      title-text: "&cТелепортированы" # Текст в title
+      subtitle-text: "&fУспешная телепортация" # Текст в sub-title
+    cooldown: # Кулдаун для телепортаций
+      1:
+        permission: cooldown.defaulttp # Пермишен для кулдауна
+        cooldown: 6 # Время кулдауна (в секундах)
+      2:
+        permission: cooldown.elitetp
+        cooldown: 3
+      3:
+        permission: cooldown.adminsepta
+        cooldown: 1
+    sound-enable: true # Вкл | Выкл Звук при телепортации
+    sound: ENTITY_CREEPER_DEATH # Звук при телепортации
+    effects-enable: false # Вкл | Выкл Эффекты при телепортации
+    effects: # Эффекты при телепортации
+      - "BLINDNESS:1" # Сначала идёт сам эффект, затем время на сколько он выдаётся (в секундах)
+    commands-args: 1 # Пример - /warp {arg1}
+    commands-cooldown: # Команды для которых применяются настройки из этой группы
+      - spawn
+      - home
+      - rtp
+      - warp
+      - SPAWN
+      - WARP
+      - HOME
+      - RTP
+      - Rtp
+      - rTp
+      - rtP
+      - RtP
+      - RTp
+      - Home
+      - HOme
+      - HOMe
+      - hOME
+      - hoME
+      - homE
+      - Warp
+      - WArp
+      - WARp
+      - wARP
+      - waRP
+      - warP
+      - Spawn
+      - SPawn
+      - SPAwn
+      - SPAWn
+      - sPAWN
+      - spAWN
+      - spaWN
+      - spawN
+
+    # Сообщения плагина
+
+messages:
+  teleport-is-cancel: "&c• &fВы отменили телепорт"
+  on-damage: "&c• &fВы получили &cурон&f, телепортация &cотменена&f!"
+  you-damager: "&c• &fВы нанесли &cурон&f, телепортация &cотменена&f!"
+  bossbar-msg: "&fТелепортация через &c{time} &fсекунд(ы)"
+  info-text: "&f\n&c• &fНе получайте &cурона &fот игроков \n&c• &fТелепортация начнётся через &c{cooldown} секунд(ы)\n&f"
+  not-teleport: "&c• &fУ вас нету телепортаций"
+  cooldown-commands: "&c• &fПодождите ещё &cпару секунд &fдля использования данной команды"
+  no-permission: "&c• &fУ вас нету прав на использование данной команды"
+  use-tab-completer: "&c• &fИспользуйте &f/NeoCommands &cinfo &f| &creload &f| &cnewcommand"
+  save-reload: "&c• &fПерезагрузите плагин для сохранения команды"
+  reload: "&c• &fПлагин перезагружен"
+
+# Время кулдауна для повторного использования команд из - commands-cooldown
+
+cooldown-commands: 6 # Время кулдауна на использование команд из - commands-cooldown при телепортации (в секундах)
+
+# Кнопка отмены телепортации
+
+cancel-button:
+  text: "&c• &c[Отменить телепорт]"
