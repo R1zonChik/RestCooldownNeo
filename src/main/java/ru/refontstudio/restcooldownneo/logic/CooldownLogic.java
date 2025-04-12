@@ -262,16 +262,16 @@ public class CooldownLogic implements Listener {
                 bossBar.addPlayer(player);
                 this.cooldownLogic.addPlayerBossBar(player, bossBar);
 
-                // Отображаем информацию об отмене телепорта
+                // Отображаем информацию об отмене телепорта через JsonMessageBuilder
                 JsonMessageBuilder.sendCancelMessage(player);
                 JsonMessageBuilder.sendCancelButton(player, this.plugin.getConfig().getString("cancel-button.text"));
 
-                // Отправляем информационное сообщение в чат (если есть)
-                String infoText = this.plugin.getConfig().getString("messages.info-text", "");
-                if (!infoText.isEmpty()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', infoText)
-                            .replace("{cooldown}", String.valueOf(cooldownTime)));
-                }
+                // УДАЛЯЕМ ДУБЛИРУЮЩИЙ КОД - не отправляем то же сообщение второй раз
+                // String infoText = this.plugin.getConfig().getString("messages.info-text", "");
+                // if (!infoText.isEmpty()) {
+                //     player.sendMessage(ChatColor.translateAlternateColorCodes('&', infoText)
+                //             .replace("{cooldown}", String.valueOf(cooldownTime)));
+                // }
 
                 // Сохраняем общее время для расчета прогресса
                 final int totalCooldownTime = cooldownTime;
@@ -310,9 +310,7 @@ public class CooldownLogic implements Listener {
                 runnable.runTaskTimer(this.plugin, 0L, 20L);
                 this.cooldownLogic.playerCooldownRunnables.put(player, runnable);
             } else {
-                // Аналогичные изменения для случая без BossBar
-
-                // Отправляем информационное сообщение в чат (если есть)
+                // Для случая без BossBar оставляем как есть
                 String infoText = this.plugin.getConfig().getString("messages.info-text", "");
                 if (!infoText.isEmpty()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', infoText)
