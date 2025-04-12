@@ -60,29 +60,33 @@ public class CooldownLogic implements Listener {
     }
 
     public boolean cancelAllCommands(Player player) {
+        // Если игрок НЕ находится в кулдауне (т.е. нет активной телепортации)
         if (!this.isPlayerInCooldown(player)) {
-            String message = this.plugin.getConfig().getString("messages.not-teleport", "&c• &fУ вас нету телепортаций");
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            // Не отправляем сообщение, просто возвращаем false
             return false;
-        } else {
-            if (this.playerCooldownRunnables.containsKey(player)) {
-                ((BukkitRunnable)this.playerCooldownRunnables.get(player)).cancel();
-                this.playerCooldownRunnables.remove(player);
-            }
-
-            this.playerCooldowns.remove(player);
-            NeoPlaceholders.setCooldown(player, 0);
-            if (this.playerBossBars.containsKey(player)) {
-                ((BossBar)this.playerBossBars.get(player)).removeAll();
-                this.playerBossBars.remove(player);
-            }
-
-            // Отправляем сообщение об отмене телепорта
-            String message = this.plugin.getConfig().getString("messages.teleport-is-cancel", "&c• &fВы отменили телепорт");
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-
-            return true;
         }
+
+        // Если есть активный runnable, отменяем его
+        if (this.playerCooldownRunnables.containsKey(player)) {
+            ((BukkitRunnable)this.playerCooldownRunnables.get(player)).cancel();
+            this.playerCooldownRunnables.remove(player);
+        }
+
+        // Удаляем информацию о кулдауне
+        this.playerCooldowns.remove(player);
+        NeoPlaceholders.setCooldown(player, 0);
+
+        // Удаляем BossBar если он есть
+        if (this.playerBossBars.containsKey(player)) {
+            ((BossBar)this.playerBossBars.get(player)).removeAll();
+            this.playerBossBars.remove(player);
+        }
+
+        // Отправляем сообщение об отмене телепорта (только один раз)
+        String message = this.plugin.getConfig().getString("messages.teleport-is-cancel", "&c• &fВы отменили телепорт");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+
+        return true;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
