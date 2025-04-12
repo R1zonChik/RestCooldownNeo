@@ -62,14 +62,14 @@ public class CancelCommand implements CommandExecutor, TabCompleter {
                 // Если это hub - пропускаем эту проверку и продолжаем выполнение
             }
 
-            String group;
             if (label.equalsIgnoreCase("neocommand_cancel")) {
-                boolean cancelled = this.cooldownLogic.cancelAllCommands(player);
-                if (cancelled) {
-                    group = this.plugin.getConfig().getString("messages.teleport-is-cancel", "");
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', group));
-                }
-
+                // УДАЛЯЕМ ДУБЛИРОВАНИЕ: метод cancelAllCommands уже отправляет сообщение
+                this.cooldownLogic.cancelAllCommands(player);
+                // Убираем этот блок кода, который дублирует сообщение:
+                // if (cancelled) {
+                //     group = this.plugin.getConfig().getString("messages.teleport-is-cancel", "");
+                //     player.sendMessage(ChatColor.translateAlternateColorCodes('&', group));
+                // }
                 return true;
             } else {
                 String newCommand;

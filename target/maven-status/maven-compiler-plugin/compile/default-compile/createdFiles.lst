@@ -1,14 +1,9 @@
-ru\refontstudio\restcooldownneo\utils\ColorUtils.class
 ru\refontstudio\restcooldownneo\logic\CooldownLogic.class
 ru\refontstudio\restcooldownneo\RestCooldownNeo.class
 ru\refontstudio\restcooldownneo\placeholders\NeoPlaceholders.class
-ru\refontstudio\restcooldownneo\JsonMessageBuilder.class
-ru\refontstudio\restcooldownneo\commands\CancelCommand.class
+ru\refontstudio\restcooldownneo\logic\CooldownLogic$CommandGroup$2.class
 ru\refontstudio\restcooldownneo\utils\WorldGuardUtils.class
 ru\refontstudio\restcooldownneo\logic\CooldownLogic$CommandGroup$3.class
-ru\refontstudio\restcooldownneo\logic\CooldownLogic$CommandGroup.class
-ru\refontstudio\restcooldownneo\logic\DamageListener.class
-ru\refontstudio\restcooldownneo\bukkit\Metrics.class
-ru\refontstudio\restcooldownneo\logic\CooldownLogic$CommandGroup$2.class
 ru\refontstudio\restcooldownneo\logic\CooldownLogic$Cooldown.class
 ru\refontstudio\restcooldownneo\logic\CooldownLogic$CommandGroup$1.class
+ru\refontstudio\restcooldownneo\logic\CooldownLogic$CommandGroup.class
