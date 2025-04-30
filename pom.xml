@@ -62,6 +62,10 @@
           <id>sk89q-repo</id>
           <url>https://maven.enginehub.org/repo/</url>
       </repository>
+      <repository>
+          <id>placeholderapi</id>
+          <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+      </repository>
   </repositories>
 
   <dependencies>
@@ -84,6 +88,13 @@
           <version>5.3.2</version>
           <scope>system</scope>
           <systemPath>D:\Майнкрафт\!КАСТОМНЫЕ ПЛАГИНЫ ОТ МЕНЯ РИЗОНЧИКА\RestDuels\target\RestDuels-5.3.2.jar</systemPath>
+      </dependency>
+      <!-- PlaceholderAPI -->
+      <dependency>
+          <groupId>me.clip</groupId>
+          <artifactId>placeholderapi</artifactId>
+          <version>2.11.6</version>
+          <scope>provided</scope>
       </dependency>
   </dependencies>
 </project>

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -93,6 +94,12 @@ public class CooldownLogic implements Listener {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
 
+        // Проверка на PVP с использованием PlaceholderAPI
+        if (isPlayerInPvP(player)) {
+            // Если игрок в режиме PVP, пропускаем обработку команд телепортации
+            return;
+        }
+
         // Проверка на дуэль и разрешение только команды /hub (для не-операторов)
         if (plugin.isPlayerInDuel(player.getUniqueId()) && !player.isOp()) {
             String message = event.getMessage();
@@ -153,6 +160,20 @@ public class CooldownLogic implements Listener {
 
     public boolean isPlayerInCooldown(Player player) {
         return this.playerCooldowns.containsKey(player) && (Integer)this.playerCooldowns.get(player) > 0;
+    }
+
+    /**
+     * Проверяет, находится ли игрок в режиме PVP
+     * @param player Игрок для проверки
+     * @return true, если игрок в режиме PVP
+     */
+    public boolean isPlayerInPvP(Player player) {
+        // Проверяем наличие PlaceholderAPI
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            String pvpStatus = PlaceholderAPI.setPlaceholders(player, "%antirelog_in_pvp%");
+            return "true".equalsIgnoreCase(pvpStatus);
+        }
+        return false;
     }
 
     private static class Cooldown {
@@ -242,6 +263,13 @@ public class CooldownLogic implements Listener {
         }
 
         public void startCooldown(final Player player, final String command, final int cooldownTime, final String[] args) {
+            // Проверка на режим PVP
+            if (cooldownLogic.isPlayerInPvP(player)) {
+                // Если игрок в режиме PVP, сразу выполняем команду без задержки
+                this.executeCommand(player, command, args);
+                return;
+            }
+
             // Если игрок находится в дуэли (и не оператор) – выходим без сообщения
             if (plugin.isPlayerInDuel(player.getUniqueId()) && !player.isOp()) {
                 return;
@@ -284,6 +312,18 @@ public class CooldownLogic implements Listener {
                     int timeLeft = cooldownTime;
 
                     public void run() {
+                        // Проверяем, не вошел ли игрок в режим PVP во время кулдауна
+                        if (cooldownLogic.isPlayerInPvP(player)) {
+                            // Если игрок в PVP, отменяем кулдаун и выполняем команду сразу
+                            CommandGroup.this.cooldownLogic.playerCooldowns.put(player, 0);
+                            NeoPlaceholders.setCooldown(player, 0);
+                            bossBar.removeAll();
+                            CommandGroup.this.cooldownLogic.removePlayerBossBar(player);
+                            CommandGroup.this.executeCommand(player, command, args);
+                            this.cancel();
+                            return;
+                        }
+
                         // Обновляем данные о кулдауне
                         CommandGroup.this.cooldownLogic.playerCooldowns.put(player, timeLeft);
                         NeoPlaceholders.setCooldown(player, timeLeft);
@@ -325,6 +365,16 @@ public class CooldownLogic implements Listener {
                     int timeLeft = cooldownTime;
 
                     public void run() {
+                        // Проверяем, не вошел ли игрок в режим PVP во время кулдауна
+                        if (cooldownLogic.isPlayerInPvP(player)) {
+                            // Если игрок в PVP, отменяем кулдаун и выполняем команду сразу
+                            CommandGroup.this.cooldownLogic.playerCooldowns.put(player, 0);
+                            NeoPlaceholders.setCooldown(player, 0);
+                            CommandGroup.this.executeCommand(player, command, args);
+                            this.cancel();
+                            return;
+                        }
+
                         // Обновляем данные о кулдауне
                         CommandGroup.this.cooldownLogic.playerCooldowns.put(player, timeLeft);
                         NeoPlaceholders.setCooldown(player, timeLeft);

@@ -4,13 +4,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 import ru.refontstudio.restcooldownneo.bukkit.Metrics;
 import ru.refontstudio.restcooldownneo.commands.CancelCommand;
 import ru.refontstudio.restcooldownneo.logic.CooldownLogic;
+import ru.refontstudio.restcooldownneo.logic.CooldownSkipper;
 import ru.refontstudio.restcooldownneo.logic.DamageListener;
+import ru.refontstudio.restcooldownneo.logic.PvPCommandBlocker;
 import ru.refontstudio.restcooldownneo.utils.ColorUtils;
 
 public final class RestCooldownNeo extends JavaPlugin {
@@ -27,6 +30,27 @@ public final class RestCooldownNeo extends JavaPlugin {
         instance = this;
         this.createConfig();
         this.translateConfigColors(this.getConfig());
+
+        // Добавляем новую секцию в конфиг, если её нет
+        if (!this.getConfig().contains("pvp-blocked-commands")) {
+            List<String> defaultBlockedCommands = Arrays.asList(
+                    "spawn", "home", "homes", "tpa", "tpaccept", "tpahere",
+                    "warp", "warps", "rtp", "wild", "wilderness", "back"
+            );
+            this.getConfig().set("pvp-blocked-commands", defaultBlockedCommands);
+            this.getConfig().set("allow-op-commands-in-pvp", false);
+            this.getConfig().set("messages.pvp-command-blocked", "&c• &fВы не можете использовать эту команду во время PVP");
+            this.saveConfig();
+        }
+
+        // В методе onEnable класса RestCooldownNeo
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            getLogger().info("PlaceholderAPI обнаружен, активирую блокировку команд в PvP...");
+            new PvPCommandBlocker(this);
+            new CooldownSkipper(this);
+        } else {
+            getLogger().warning("PlaceholderAPI не найден! Блокировка команд в PvP не будет работать.");
+        }
 
         // Получаем экземпляр дуэльного плагина
         if (getServer().getPluginManager().getPlugin("RestDuels") != null) {
@@ -48,6 +72,14 @@ public final class RestCooldownNeo extends JavaPlugin {
         if (this.getCommand("neocommands") != null) {
             this.getCommand("neocommands").setExecutor(cancelCommand);
             this.getCommand("neocommands").setTabCompleter(cancelCommand);
+        }
+
+        // Регистрация блокировки команд в PvP при использовании PlaceholderAPI
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            getLogger().info("PlaceholderAPI обнаружен, активирую блокировку команд в PvP...");
+            new PvPCommandBlocker(this);
+        } else {
+            getLogger().warning("PlaceholderAPI не найден! Блокировка команд в PvP не будет работать.");
         }
 
         getLogger().info("RestCooldownNeo успешно запущен!");
